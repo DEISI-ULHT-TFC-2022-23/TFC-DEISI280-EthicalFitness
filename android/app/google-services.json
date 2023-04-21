@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "9107631260",
+    "firebase_url": "https://ethical-fitness-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ethical-fitness",
+    "storage_bucket": "ethical-fitness.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9107631260:android:2b02ddc58929cae2319159",
+        "android_client_info": {
+          "package_name": "com.ethical_fitness_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9107631260-l30rsk76a700jrtlju4a8imhnf6bdon1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArfWPn4UREjJwWOlexMQ1A71tvp6_bvy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9107631260-l30rsk76a700jrtlju4a8imhnf6bdon1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "9107631260-ffpnm2f7u36a0gpaomefah6hqj551qhh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ethicalFitnessApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9107631260:android:3fd5029d8d35a468319159",
+        "android_client_info": {
+          "package_name": "com.example.ethicalfitness_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9107631260-l30rsk76a700jrtlju4a8imhnf6bdon1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArfWPn4UREjJwWOlexMQ1A71tvp6_bvy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9107631260-l30rsk76a700jrtlju4a8imhnf6bdon1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "9107631260-ffpnm2f7u36a0gpaomefah6hqj551qhh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ethicalFitnessApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

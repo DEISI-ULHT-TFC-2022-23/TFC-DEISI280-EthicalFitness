@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>9107631260-cjdbfjpj0svbahpanq16am8ccj3794rv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.9107631260-cjdbfjpj0svbahpanq16am8ccj3794rv</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDb70BnfthLGQ0--_mixSq3keJNFxR3Vwo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>9107631260</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.ethicalfitness2</string>
+	<key>PROJECT_ID</key>
+	<string>ethical-fitness</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ethical-fitness.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:9107631260:ios:6351e5a189bb5a27319159</string>
+	<key>DATABASE_URL</key>
+	<string>https://ethical-fitness-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
