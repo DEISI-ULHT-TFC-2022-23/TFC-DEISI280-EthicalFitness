@@ -14,7 +14,7 @@ class DetailsTrainingPlan extends StatelessWidget {
       body: Center(
         child: Text(
           'The details Page #$index',
-          style: TextStyle(fontSize: 32.0),
+          style: const TextStyle(fontSize: 32.0),
         ),
       ),
     );

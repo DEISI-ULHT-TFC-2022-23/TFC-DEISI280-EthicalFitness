@@ -1,5 +1,6 @@
 import 'package:ethicalfitness_2/detailsTrainingPlan.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TrainingPlanPage extends StatelessWidget {
   const TrainingPlanPage({super.key});
@@ -8,17 +9,24 @@ class TrainingPlanPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Plano de treino',
-          style: TextStyle(
-            fontSize: 20,
-            color: Color.fromARGB(255, 238, 238, 238),
+        title: Transform(
+          transform: Matrix4.skewX(
+              -0.2), // skew the text by 0.3 radians (about 17 degrees)
+          child: Text(
+            'Plano de treino',
+            style: GoogleFonts.anton(
+              textStyle: const TextStyle(
+                fontSize: 29,
+                color: Color.fromARGB(255, 238, 238, 238),
+              ),
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
         backgroundColor: const Color.fromARGB(255, 18, 18, 18),
         centerTitle: true,
       ),
+      backgroundColor: const Color.fromARGB(255, 18, 18, 18),
       body: _buildListView(context),
     );
   }
@@ -39,21 +47,22 @@ class TrainingPlanPage extends StatelessWidget {
 
     final List<String> fotosExercicios = [
       'images/Exercicio-burpies.png',
-      'images/Exercicio-abdominal.jpg',
+      'images/Exercicio-prancha.png',
       'images/Exercicio-abdominal.jpg',
       'images/Exercicio-flexoes.jpg',
-      'images/Exercicio-abdominal.jpg',
-      'images/Exercicio-abdominal.jpg',
-      'images/Exercicio-abdominal.jpg',
-      'images/Exercicio-abdominal.jpg',
-      'images/Exercicio-abdominal.jpg',
-      'images/Exercicio-abdominal.jpg'
+      'images/Exercicio-agachamento.jpg',
+      'images/Exercicio-corda.jpeg',
+      'images/Exercicio-bicep.jpg',
+      'images/Exercicio-bicepBarra.jpg',
+      'images/Exercicio-triceps.jpg',
+      'images/Exercicio-burpies.png'
     ];
 
     return ListView.builder(
       itemCount: 10,
       itemBuilder: (_, index) {
         return Card(
+          color: const Color.fromARGB(255, 255, 255, 255),
           child: ListTile(
             title: Text('Exercício ${index + 1}'),
             subtitle: Text(exercicios[index % exercicios.length]),
@@ -71,7 +80,8 @@ class TrainingPlanPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailsTrainingPlan(index)),
+                    builder: (context) => DetailsTrainingPlan(index),
+                  ),
                 );
               },
             ),
