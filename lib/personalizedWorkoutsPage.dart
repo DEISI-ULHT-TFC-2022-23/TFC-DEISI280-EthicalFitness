@@ -66,6 +66,66 @@ class PersonalizedWorkoutsPage extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 75),
+          Text(
+            'Disponibilidade do PT',
+            style: GoogleFonts.anton(
+              textStyle: const TextStyle(
+                fontSize: 25,
+                color: Color.fromARGB(255, 219, 219, 219),
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 2,
+                    offset: Offset(2, 2),
+                  )
+                ],
+              ),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Data:',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '03/05/2023',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '07/05/2023',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '08/05/2023',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     );
