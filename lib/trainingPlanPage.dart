@@ -64,8 +64,18 @@ class TrainingPlanPage extends StatelessWidget {
         return Card(
           color: const Color.fromARGB(255, 255, 255, 255),
           child: ListTile(
-            title: Text('Exercício ${index + 1}'),
-            subtitle: Text(exercicios[index % exercicios.length]),
+            title: Text(
+              'Exercício ${index + 1}',
+              style: const TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            subtitle: Text(
+              exercicios[index % exercicios.length],
+              style: const TextStyle(
+                color: Color.fromARGB(255, 59, 59, 59),
+              ),
+            ),
             leading: SizedBox(
               width: MediaQuery.of(context).size.width * 0.25,
               height: MediaQuery.of(context).size.width * 0.2,
@@ -76,6 +86,7 @@ class TrainingPlanPage extends StatelessWidget {
             ),
             trailing: IconButton(
               icon: const Icon(Icons.arrow_forward),
+              color: Colors.black,
               onPressed: () {
                 Navigator.push(
                   context,
