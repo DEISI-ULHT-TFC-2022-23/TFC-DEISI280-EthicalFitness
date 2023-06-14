@@ -33,23 +33,49 @@ class _DetailsTrainingPlanState extends State<DetailsTrainingPlan> {
   @override
   Widget build(BuildContext context) {
     final isMuted = controller.value.volume == 0;
-    return Column(
-      children: [
-        VideoPlayerWidget(controller: controller),
-        const SizedBox(height: 32),
-        if (controller != null && controller.value.isInitialized)
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.red,
-            child: IconButton(
-              icon: Icon(
-                isMuted ? Icons.volume_mute : Icons.volume_up,
-                color: Colors.white,
+    return Scaffold(
+      appBar: AppBar(
+        title: Transform(
+          transform: Matrix4.skewX(
+              -0.2), // skew the text by 0.3 radians (about 17 degrees)
+          child: Text(
+            'Treinos Personalizados',
+            style: GoogleFonts.anton(
+              textStyle: const TextStyle(
+                fontSize: 27,
+                color: Color.fromARGB(255, 238, 238, 238),
               ),
-              onPressed: () => controller.setVolume(isMuted ? 1 : 0),
             ),
+            textAlign: TextAlign.center,
           ),
-      ],
+        ),
+        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+        centerTitle: true,
+      ),
+      backgroundColor: const Color.fromARGB(255, 18, 18, 18),
+      body: Center(
+        // Center the video vertically
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center the video horizontally
+          children: [
+            VideoPlayerWidget(controller: controller),
+            const SizedBox(height: 32),
+            if (controller.value.isInitialized)
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                child: IconButton(
+                  icon: Icon(
+                    isMuted ? Icons.volume_mute_rounded : Icons.volume_up,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => controller.setVolume(isMuted ? 1 : 0),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

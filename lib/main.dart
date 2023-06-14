@@ -14,25 +14,26 @@ void main() async {
 }
 
 //class MyApp extends StatelessWidget {
-// const MyApp({Key? key}) : super(key: key);
-
+//  const MyApp({Key? key}) : super(key: key);
 //  @override
-//  Widget build(BuildContext context) {
-//    return const MaterialApp(
-//      debugShowCheckedModeBanner: false,
-//      home: MainPage(),
-//    );
-//  }
-//}
-
+//  Widget build(BuildContext context) => ChangeNotifierProvider(
+//        create: (context) => EventProvider(),
+//        child: const MaterialApp(
+//          debugShowCheckedModeBanner: false,
+//          home: MainPage(),
+//        ),
+//      );
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (context) => EventProvider(),
-        child: const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: MainPage(),
-        ),
-      );
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => EventProvider(),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MainPage(),
+      ),
+    );
+  }
 }
