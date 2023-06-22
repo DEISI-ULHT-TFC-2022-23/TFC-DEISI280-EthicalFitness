@@ -2,6 +2,7 @@ import 'package:ethicalfitness_2/event.dart';
 import 'package:ethicalfitness_2/eventEditingPage.dart';
 import 'package:ethicalfitness_2/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ethicalfitness_2/event_provider.dart';
 
@@ -15,8 +16,21 @@ class EventViewingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          leading: const CloseButton(),
-          actions: buildViewingActions(context, event),
+          title: Transform(
+            transform: Matrix4.skewX(-0.2),
+            child: Text(
+              'Evento',
+              style: GoogleFonts.anton(
+                textStyle: const TextStyle(
+                  fontSize: 27,
+                  color: Color.fromARGB(255, 238, 238, 238),
+                ),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+          centerTitle: true,
         ),
         body: ListView(
           padding: const EdgeInsets.all(32),
@@ -30,7 +44,8 @@ class EventViewingPage extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               event.description,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0), fontSize: 18),
             ),
           ],
         ),

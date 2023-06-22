@@ -1,6 +1,9 @@
 import 'package:ethicalfitness_2/treinos.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'event.dart';
+import 'event_provider.dart';
 
 class MarkTreinoPopupContent extends StatelessWidget {
   @override
@@ -24,7 +27,7 @@ class MarkTreinoPopupContent extends StatelessWidget {
                 final treino = treinos[index];
                 return ListTile(
                   title: Text(treino.pt),
-                  subtitle: Text(treino.data.toString()),
+                  subtitle: Text(treino.data_inicio.toString()),
                   onTap: () {
                     if (index == 0 && treino.isMarcada == false) {
                       FirebaseFirestore.instance
@@ -32,6 +35,17 @@ class MarkTreinoPopupContent extends StatelessWidget {
                               'treinos') // Acessa o ID da coleção com base no index
                           .doc('1Bqh8q3DJMuzRixMamL0')
                           .update({'isMarcada': true});
+
+                      // Criar um novo evento na agenda
+                      EventProvider eventProvider =
+                          Provider.of<EventProvider>(context, listen: false);
+                      Event newEvent = Event(
+                        title: treino.pt,
+                        description: 'Treino personalizado com ${treino.pt}',
+                        from: treino.data_inicio,
+                        to: treino.data_fim,
+                      );
+                      eventProvider.addEvent(newEvent);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -46,6 +60,17 @@ class MarkTreinoPopupContent extends StatelessWidget {
                           .doc('AXcBWFv15HQba1ZyIo7N')
                           .update({'isMarcada': true});
 
+                      // Criar um novo evento na agenda
+                      EventProvider eventProvider =
+                          Provider.of<EventProvider>(context, listen: false);
+                      Event newEvent = Event(
+                        title: treino.pt,
+                        description: 'Treino personalizado com ${treino.pt}',
+                        from: treino.data_inicio,
+                        to: treino.data_fim,
+                      );
+                      eventProvider.addEvent(newEvent);
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Treino marcado com sucesso!'),
@@ -59,6 +84,17 @@ class MarkTreinoPopupContent extends StatelessWidget {
                                 'treinos') // Acessa o ID da coleção com base no index
                             .doc('UnXKo23MUbiOFKXglTNg')
                             .update({'isMarcada': true});
+
+                        // Criar um novo evento na agenda
+                        EventProvider eventProvider =
+                            Provider.of<EventProvider>(context, listen: false);
+                        Event newEvent = Event(
+                          title: treino.pt,
+                          description: 'Treino personalizado com ${treino.pt}',
+                          from: treino.data_inicio,
+                          to: treino.data_fim,
+                        );
+                        eventProvider.addEvent(newEvent);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -105,7 +141,7 @@ class UnmarkTreinoPopupContent extends StatelessWidget {
                 final treino = treinos[index];
                 return ListTile(
                   title: Text(treino.pt),
-                  subtitle: Text(treino.data.toString()),
+                  subtitle: Text(treino.data_inicio.toString()),
                   onTap: () {
                     if (index == 0 && treino.isMarcada == true) {
                       FirebaseFirestore.instance

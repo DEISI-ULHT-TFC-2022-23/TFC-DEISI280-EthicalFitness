@@ -205,7 +205,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       ListTile(
         title: Text(
           text,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         trailing: const Icon(Icons.arrow_drop_down),
         onTap: onClicked,

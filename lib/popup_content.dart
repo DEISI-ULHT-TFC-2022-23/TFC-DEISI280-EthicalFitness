@@ -40,11 +40,9 @@ class MarkAulaPopupContent extends StatelessWidget {
                           Provider.of<EventProvider>(context, listen: false);
                       Event newEvent = Event(
                         title: aula.tipo,
-                        description: 'Descrição da aula',
-                        from: aula
-                            .data_inicio, // Substitua com a data e hora de início da aula
-                        to: aula
-                            .data_fim, // Substitua com a data e hora de término da aula
+                        description: 'Aula de grupo de ${aula.tipo}',
+                        from: aula.data_inicio,
+                        to: aula.data_fim,
                       );
                       eventProvider.addEvent(newEvent);
 
@@ -61,6 +59,17 @@ class MarkAulaPopupContent extends StatelessWidget {
                           .doc('bTSgp1whBPauNdoZdk4r')
                           .update({'isMarcada': true});
 
+                      // Criar um novo evento na agenda
+                      EventProvider eventProvider =
+                          Provider.of<EventProvider>(context, listen: false);
+                      Event newEvent = Event(
+                        title: aula.tipo,
+                        description: 'Aula de grupo de ${aula.tipo}',
+                        from: aula.data_inicio,
+                        to: aula.data_fim,
+                      );
+                      eventProvider.addEvent(newEvent);
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Aula marcada com sucesso!'),
@@ -74,6 +83,17 @@ class MarkAulaPopupContent extends StatelessWidget {
                                 'aulas') // Acessa o ID da coleção com base no index
                             .doc('nK4bntDZrgo0usiSiHms')
                             .update({'isMarcada': true});
+
+                        // Criar um novo evento na agenda
+                        EventProvider eventProvider =
+                            Provider.of<EventProvider>(context, listen: false);
+                        Event newEvent = Event(
+                          title: aula.tipo,
+                          description: 'Aula de grupo de ${aula.tipo}',
+                          from: aula.data_inicio,
+                          to: aula.data_fim,
+                        );
+                        eventProvider.addEvent(newEvent);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

@@ -132,6 +132,7 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 20)
           ],
         ),
       ),
@@ -163,7 +164,12 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
           DateFormat('HH:mm').format(user.data_inicio),
           style: const TextStyle(color: Colors.white),
         ),
-        trailing: user.isMarcada ? Icon(Icons.check) : Icon(Icons.close),
+        trailing: Icon(
+          user.isMarcada ? Icons.check : Icons.close,
+          color: user.isMarcada
+              ? const Color.fromARGB(255, 0, 113, 21)
+              : const Color.fromARGB(255, 172, 0, 0),
+        ),
       );
 
   Widget _buildPopupContent() {

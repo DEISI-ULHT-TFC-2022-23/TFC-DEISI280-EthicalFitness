@@ -132,6 +132,7 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 20)
           ],
         ),
       ),
@@ -153,17 +154,22 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
   Widget buildUser(Treino user) => ListTile(
         leading: CircleAvatar(
           backgroundColor: const Color.fromARGB(255, 0, 60, 145),
-          child: Text(DateFormat('dd').format(user.data)),
+          child: Text(DateFormat('dd').format(user.data_inicio)),
         ),
         title: Text(
           user.pt,
           style: const TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-          DateFormat('HH:mm').format(user.data),
+          DateFormat('HH:mm').format(user.data_inicio),
           style: const TextStyle(color: Colors.white),
         ),
-        trailing: user.isMarcada ? Icon(Icons.check) : Icon(Icons.close),
+        trailing: Icon(
+          user.isMarcada ? Icons.check : Icons.close,
+          color: user.isMarcada
+              ? const Color.fromARGB(255, 0, 113, 21)
+              : const Color.fromARGB(255, 172, 0, 0),
+        ),
       );
 
   Widget _buildPopupContent2() {
