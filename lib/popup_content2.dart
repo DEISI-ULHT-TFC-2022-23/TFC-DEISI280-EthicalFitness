@@ -17,20 +17,63 @@ class MarkTreinoPopupContent extends StatelessWidget {
                 ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final aulas = snapshot.data!;
+            final treinos = snapshot.data!;
             return ListView.builder(
-              itemCount: aulas.length,
+              itemCount: treinos.length,
               itemBuilder: (context, index) {
-                final aula = aulas[index];
+                final treino = treinos[index];
                 return ListTile(
-                  title: Text(aula.pt),
-                  subtitle: Text(aula.data.toString()),
-                  onTap: () {},
+                  title: Text(treino.pt),
+                  subtitle: Text(treino.data.toString()),
+                  onTap: () {
+                    if (index == 0 && treino.isMarcada == false) {
+                      FirebaseFirestore.instance
+                          .collection(
+                              'treinos') // Acessa o ID da coleção com base no index
+                          .doc('1Bqh8q3DJMuzRixMamL0')
+                          .update({'isMarcada': true});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Treino marcado com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else if (index == 1 && treino.isMarcada == false) {
+                      FirebaseFirestore.instance
+                          .collection(
+                              'treinos') // Acessa o ID da coleção com base no index
+                          .doc('AXcBWFv15HQba1ZyIo7N')
+                          .update({'isMarcada': true});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Treino marcado com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      if (index == 2 && treino.isMarcada == false) {
+                        FirebaseFirestore.instance
+                            .collection(
+                                'treinos') // Acessa o ID da coleção com base no index
+                            .doc('UnXKo23MUbiOFKXglTNg')
+                            .update({'isMarcada': true});
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Treino marcado com sucesso!'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 );
               },
             );
           } else if (snapshot.hasError) {
-            return Text('Erro ao carregar as aulas: ${snapshot.error}');
+            return Text('Erro ao carregar os treinos: ${snapshot.error}');
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -55,20 +98,63 @@ class UnmarkTreinoPopupContent extends StatelessWidget {
                 ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final aulas = snapshot.data!;
+            final treinos = snapshot.data!;
             return ListView.builder(
-              itemCount: aulas.length,
+              itemCount: treinos.length,
               itemBuilder: (context, index) {
-                final aula = aulas[index];
+                final treino = treinos[index];
                 return ListTile(
-                  title: Text(aula.pt),
-                  subtitle: Text(aula.data.toString()),
-                  onTap: () {},
+                  title: Text(treino.pt),
+                  subtitle: Text(treino.data.toString()),
+                  onTap: () {
+                    if (index == 0 && treino.isMarcada == true) {
+                      FirebaseFirestore.instance
+                          .collection(
+                              'treinos') // Acessa o ID da coleção com base no index
+                          .doc('1Bqh8q3DJMuzRixMamL0')
+                          .update({'isMarcada': false});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Treino desmarcado com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else if (index == 1 && treino.isMarcada == true) {
+                      FirebaseFirestore.instance
+                          .collection(
+                              'treinos') // Acessa o ID da coleção com base no index
+                          .doc('AXcBWFv15HQba1ZyIo7N')
+                          .update({'isMarcada': false});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Treino desmarcado com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      if (index == 2 && treino.isMarcada == true) {
+                        FirebaseFirestore.instance
+                            .collection(
+                                'treinos') // Acessa o ID da coleção com base no index
+                            .doc('UnXKo23MUbiOFKXglTNg')
+                            .update({'isMarcada': false});
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Treino desmarcado com sucesso!'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 );
               },
             );
           } else if (snapshot.hasError) {
-            return Text('Erro ao carregar as aulas: ${snapshot.error}');
+            return Text('Erro ao carregar os treinos: ${snapshot.error}');
           } else {
             return const Center(child: CircularProgressIndicator());
           }

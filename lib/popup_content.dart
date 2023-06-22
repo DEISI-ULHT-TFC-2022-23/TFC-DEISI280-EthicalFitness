@@ -1,6 +1,9 @@
 import 'package:ethicalfitness_2/aula.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'event.dart';
+import 'event_provider.dart';
 
 class MarkAulaPopupContent extends StatelessWidget {
   @override
@@ -31,6 +34,19 @@ class MarkAulaPopupContent extends StatelessWidget {
                               'aulas') // Acessa o ID da coleção com base no index
                           .doc('379eUYq4o1K3ujIyAZow')
                           .update({'isMarcada': true});
+
+                      // Criar um novo evento na agenda
+                      EventProvider eventProvider =
+                          Provider.of<EventProvider>(context, listen: false);
+                      Event newEvent = Event(
+                        title: 'Título da aula',
+                        description: 'Descrição da aula',
+                        from: aula
+                            .data, // Substitua com a data e hora de início da aula
+                        to: aula
+                            .data, // Substitua com a data e hora de término da aula
+                      );
+                      eventProvider.addEvent(newEvent);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

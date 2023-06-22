@@ -75,7 +75,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
           ),
           onPressed: saveForm,
           icon: const Icon(Icons.done),
-          label: const Text('Save'),
+          label: const Text('Salvar'),
         )
       ];
 
@@ -83,11 +83,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
         style: const TextStyle(fontSize: 24),
         decoration: const InputDecoration(
           border: UnderlineInputBorder(),
-          hintText: 'Add Title',
+          hintText: 'Adicionar Título',
         ),
         onFieldSubmitted: (_) => saveForm(),
-        validator: (title) =>
-            title != null && title.isEmpty ? 'Title cannot be empty' : null,
+        validator: (title) => title != null && title.isEmpty
+            ? 'Título não pode estar vazio'
+            : null,
         controller: titleController,
       );
 
@@ -99,7 +100,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       );
 
   Widget buildFrom() => buildHeader(
-        header: 'FROM',
+        header: 'De',
         child: Row(
           children: [
             Expanded(
@@ -120,7 +121,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       );
 
   Widget buildTo() => buildHeader(
-        header: 'TO',
+        header: 'Até',
         child: Row(
           children: [
             Expanded(
@@ -226,7 +227,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (isValid) {
       final event = Event(
         title: titleController.text,
-        description: 'Description',
+        description: 'Descrição',
         from: fromDate,
         to: toDate,
         isAllDay: false,
