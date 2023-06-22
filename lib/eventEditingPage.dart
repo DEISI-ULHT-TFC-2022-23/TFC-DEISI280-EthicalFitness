@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EventEditingPage extends StatefulWidget {
-  //const EventEditingPage({super.key});
   final Event? event;
 
   const EventEditingPage({
@@ -204,7 +203,10 @@ class _EventEditingPageState extends State<EventEditingPage> {
     required VoidCallback onClicked,
   }) =>
       ListTile(
-        title: Text(text),
+        title: Text(
+          text,
+          style: TextStyle(color: Colors.black),
+        ),
         trailing: const Icon(Icons.arrow_drop_down),
         onTap: onClicked,
       );
@@ -216,7 +218,10 @@ class _EventEditingPageState extends State<EventEditingPage> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(header, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            header,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           child,
         ],
       );
@@ -241,7 +246,6 @@ class _EventEditingPageState extends State<EventEditingPage> {
       } else {
         provider.addEvent(event);
       }
-      //Navigator.of(context).pop();
     }
   }
 }

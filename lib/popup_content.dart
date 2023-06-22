@@ -26,7 +26,7 @@ class MarkAulaPopupContent extends StatelessWidget {
                 final aula = aulas[index];
                 return ListTile(
                   title: Text(aula.tipo),
-                  subtitle: Text(aula.data.toString()),
+                  subtitle: Text(aula.data_inicio.toString()),
                   onTap: () {
                     if (index == 0 && aula.isMarcada == false) {
                       FirebaseFirestore.instance
@@ -39,12 +39,12 @@ class MarkAulaPopupContent extends StatelessWidget {
                       EventProvider eventProvider =
                           Provider.of<EventProvider>(context, listen: false);
                       Event newEvent = Event(
-                        title: 'Título da aula',
+                        title: aula.tipo,
                         description: 'Descrição da aula',
                         from: aula
-                            .data, // Substitua com a data e hora de início da aula
+                            .data_inicio, // Substitua com a data e hora de início da aula
                         to: aula
-                            .data, // Substitua com a data e hora de término da aula
+                            .data_fim, // Substitua com a data e hora de término da aula
                       );
                       eventProvider.addEvent(newEvent);
 
@@ -119,7 +119,7 @@ class UnmarkAulaPopupContent extends StatelessWidget {
                 final aula = aulas[index];
                 return ListTile(
                   title: Text(aula.tipo),
-                  subtitle: Text(aula.data.toString()),
+                  subtitle: Text(aula.data_inicio.toString()),
                   onTap: () {
                     if (index == 0 && aula.isMarcada == true) {
                       FirebaseFirestore.instance

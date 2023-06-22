@@ -153,14 +153,14 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
   Widget buildUser(Aula user) => ListTile(
         leading: CircleAvatar(
           backgroundColor: const Color.fromARGB(255, 0, 60, 145),
-          child: Text(DateFormat('dd').format(user.data)),
+          child: Text(DateFormat('dd').format(user.data_inicio)),
         ),
         title: Text(
           user.tipo,
           style: const TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-          DateFormat('HH:mm').format(user.data),
+          DateFormat('HH:mm').format(user.data_inicio),
           style: const TextStyle(color: Colors.white),
         ),
         trailing: user.isMarcada ? Icon(Icons.check) : Icon(Icons.close),
