@@ -25,18 +25,47 @@ class MarkAulaPopupContent extends StatelessWidget {
                   title: Text(aula.tipo),
                   subtitle: Text(aula.data.toString()),
                   onTap: () {
-                    if (aula.isMarcada) {
-                      // Aula já está marcada, então desmarca
+                    if (index == 0 && aula.isMarcada == false) {
                       FirebaseFirestore.instance
-                          .collection('aulas')
-                          .doc(aula.id)
-                          .update({'isMarcada': false});
-                    } else {
-                      // Aula não está marcada, então marca
-                      FirebaseFirestore.instance
-                          .collection('aulas')
-                          .doc(aula.id)
+                          .collection(
+                              'aulas') // Acessa o ID da coleção com base no index
+                          .doc('379eUYq4o1K3ujIyAZow')
                           .update({'isMarcada': true});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Aula marcada com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else if (index == 1 && aula.isMarcada == false) {
+                      FirebaseFirestore.instance
+                          .collection(
+                              'aulas') // Acessa o ID da coleção com base no index
+                          .doc('bTSgp1whBPauNdoZdk4r')
+                          .update({'isMarcada': true});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Aula marcada com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      if (index == 2 && aula.isMarcada == false) {
+                        FirebaseFirestore.instance
+                            .collection(
+                                'aulas') // Acessa o ID da coleção com base no index
+                            .doc('nK4bntDZrgo0usiSiHms')
+                            .update({'isMarcada': true});
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Aula marcada com sucesso!'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                     }
                   },
                 );
@@ -76,18 +105,47 @@ class UnmarkAulaPopupContent extends StatelessWidget {
                   title: Text(aula.tipo),
                   subtitle: Text(aula.data.toString()),
                   onTap: () {
-                    if (aula.isMarcada) {
-                      // Aula já está marcada, então desmarca
+                    if (index == 0 && aula.isMarcada == true) {
                       FirebaseFirestore.instance
-                          .collection('aulas')
-                          .doc(aula.id)
+                          .collection(
+                              'aulas') // Acessa o ID da coleção com base no index
+                          .doc('379eUYq4o1K3ujIyAZow')
                           .update({'isMarcada': false});
-                    } else {
-                      // Aula não está marcada, então marca
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Aula desmarcada com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else if (index == 1 && aula.isMarcada == true) {
                       FirebaseFirestore.instance
-                          .collection('aulas')
-                          .doc(aula.id)
-                          .update({'isMarcada': true});
+                          .collection(
+                              'aulas') // Acessa o ID da coleção com base no index
+                          .doc('bTSgp1whBPauNdoZdk4r')
+                          .update({'isMarcada': false});
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Aula desmarcada com sucesso!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      if (index == 2 && aula.isMarcada == true) {
+                        FirebaseFirestore.instance
+                            .collection(
+                                'aulas') // Acessa o ID da coleção com base no index
+                            .doc('nK4bntDZrgo0usiSiHms')
+                            .update({'isMarcada': false});
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Aula desmarcada com sucesso!'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                     }
                   },
                 );

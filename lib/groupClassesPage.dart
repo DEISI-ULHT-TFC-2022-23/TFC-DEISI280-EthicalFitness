@@ -21,12 +21,6 @@ class GroupClassesPage extends StatefulWidget {
 }
 
 class _GroupClassesPageState extends State<GroupClassesPage> {
-//  Stream<List<User>> readUsers() => FirebaseFirestore.instance
-//      .collection('aulas')
-//      .snapshots()
-//      .map((snapshot) =>
-//          snapshot.docs.map((doc) => User.fromJson(doc.data())).toList());
-
   Stream<List<Aula>> readUsers() => FirebaseFirestore.instance
       .collection('aulas')
       .snapshots()

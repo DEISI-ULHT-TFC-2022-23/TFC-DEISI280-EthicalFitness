@@ -1,16 +1,53 @@
+import 'package:ethicalfitness_2/treinos.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/intl.dart';
+import 'popup_content2.dart';
 
-class PersonalizedWorkoutsPage extends StatelessWidget {
+enum PopupMode {
+  mark,
+  unmark,
+}
+
+class PersonalizedWorkoutsPage extends StatefulWidget {
+  static const String title = 'Setup Firebase';
+
   const PersonalizedWorkoutsPage({Key? key}) : super(key: key);
+
+  @override
+  _PersonalizedWorkoutsPage createState() => _PersonalizedWorkoutsPage();
+}
+
+class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
+  Stream<List<Treino>> readUsers() => FirebaseFirestore.instance
+      .collection('treinos')
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map((doc) => Treino.fromJson(doc.data())..id = doc.id)
+          .toList());
+
+  PopupMode? _popupMode;
+
+  void _handleMarkTreinoClick() {
+    setState(() {
+      _popupMode = PopupMode.mark;
+    });
+  }
+
+  void _handleUnmarkTreinoClick() {
+    setState(() {
+      _popupMode = PopupMode.unmark;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Transform(
-          transform: Matrix4.skewX(
-              -0.2), // skew the text by 0.3 radians (about 17 degrees)
+          transform: Matrix4.skewX(-0.2),
           child: Text(
             'Treinos Personalizados',
             style: GoogleFonts.anton(
@@ -26,108 +63,116 @@ class PersonalizedWorkoutsPage extends StatelessWidget {
         centerTitle: true,
       ),
       backgroundColor: const Color.fromARGB(255, 18, 18, 18),
-      body: Column(
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: const Image(
-              image: AssetImage('images/treinoPersonalizado.jpg'),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.4,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Implement schedule classes functionality
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 133, 0,
-                        0), // sets the button's background color to red
-                  ),
-                  child: const Text('Marcar Treino'),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.4,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Implement cancel classes functionality
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 133, 0,
-                        0), // sets the button's background color to red
-                  ),
-                  child: const Text('Desmarcar Treino'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 75),
-          Text(
-            'Disponibilidade do PT',
-            style: GoogleFonts.anton(
-              textStyle: const TextStyle(
-                fontSize: 25,
-                color: Color.fromARGB(255, 219, 219, 219),
-                shadows: [
-                  Shadow(
-                    color: Colors.black,
-                    blurRadius: 2,
-                    offset: Offset(2, 2),
-                  )
-                ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.3,
+              child: const Image(
+                image: AssetImage('images/treinoPersonalizado.jpg'),
               ),
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Data:',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '03/05/2023',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '07/05/2023',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '08/05/2023',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 35),
+            const Text(
+              'Treinos disponíveis',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: StreamBuilder<List<Treino>>(
+                stream: readUsers(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text(
+                      'Não tem dados! ${snapshot.error}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final users = snapshot.data!;
+
+                    return ListView(
+                      children: users.map(buildUser).toList(),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: ElevatedButton(
+                    onPressed: _handleMarkTreinoClick,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                    ),
+                    child: const Text('Marcar Treino'),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: ElevatedButton(
+                    onPressed: _handleUnmarkTreinoClick,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                    ),
+                    child: const Text('Desmarcar Treino'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
+      floatingActionButton: Visibility(
+        visible: _popupMode != null,
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _popupMode = null;
+            });
+          },
+          child: const Icon(Icons.close),
+        ),
+      ),
+      bottomSheet: _buildPopupContent2(),
     );
+  }
+
+  Widget buildUser(Treino user) => ListTile(
+        leading: CircleAvatar(
+          backgroundColor: const Color.fromARGB(255, 0, 60, 145),
+          child: Text(DateFormat('dd').format(user.data)),
+        ),
+        title: Text(
+          user.pt,
+          style: const TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          DateFormat('HH:mm').format(user.data),
+          style: const TextStyle(color: Colors.white),
+        ),
+        trailing: user.isMarcada ? Icon(Icons.check) : Icon(Icons.close),
+      );
+
+  Widget _buildPopupContent2() {
+    if (_popupMode == PopupMode.mark) {
+      return MarkTreinoPopupContent();
+    } else if (_popupMode == PopupMode.unmark) {
+      return UnmarkTreinoPopupContent();
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }
