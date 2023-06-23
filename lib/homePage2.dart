@@ -27,7 +27,7 @@ class _HomePage2State extends State<HomePage2> {
   }
 
   void scrollToFirstNews() {
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 2), () {
       _scrollController.animateTo(
         720,
         duration: const Duration(milliseconds: 500),

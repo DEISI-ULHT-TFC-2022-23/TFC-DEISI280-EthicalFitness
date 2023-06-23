@@ -12,9 +12,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // controladores de textp
-  final _emailControler = TextEditingController();
-  final _passwordControler = TextEditingController();
+  // controladores de texto
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isPersonalTrainer = false;
 
   Future signIn() async {
     // loading circle
@@ -26,21 +27,19 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailControler.text.trim(),
-      password: _passwordControler.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
     );
-    //  if (FirebaseAuth.instance.currentUser != null) {
-    //  Navigator.pushNamedAndRemoveUntil(context, "/homePage", (route) => false);
-    // }
+
     // para o loading
     Navigator.of(context).pop();
   }
 
-// gestão de memória
+  // gestão de memória
   @override
   void dispose() {
-    _emailControler.dispose();
-    _passwordControler.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -66,7 +65,40 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 35,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Theme(
+                    data: ThemeData(
+                      unselectedWidgetColor: Colors.white,
+                    ),
+                    child: CheckboxListTile(
+                      title: const Text(
+                        'Sou Personal Trainer',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      value: _isPersonalTrainer,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _isPersonalTrainer = newValue!;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: EdgeInsets.zero,
+                      tileColor: Colors.transparent,
+                      activeColor: const Color.fromARGB(255, 143, 0, 0),
+                      checkColor: const Color.fromARGB(255, 255, 255, 255),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            color: Color.fromARGB(255, 0, 0, 0)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 2),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
@@ -80,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextField(
                         decoration: const InputDecoration(
                             border: InputBorder.none, hintText: 'Email'),
-                        controller: _emailControler,
+                        controller: _emailController,
                       ),
                     ),
                   ),
@@ -100,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         decoration: const InputDecoration(
                             border: InputBorder.none, hintText: 'Password'),
-                        controller: _passwordControler,
+                        controller: _passwordController,
                       ),
                     ),
                   ),
