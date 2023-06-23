@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'popup_content.dart';
+import 'package:ethicalfitness_2/loginPage.dart';
+import 'global.dart';
 
 enum PopupMode {
   mark,
@@ -21,6 +23,8 @@ class GroupClassesPage extends StatefulWidget {
 }
 
 class _GroupClassesPageState extends State<GroupClassesPage> {
+  bool isPersonalTrainer = Globals.isPersonalTrainer;
+
   Stream<List<Aula>> readUsers() => FirebaseFirestore.instance
       .collection('aulas')
       .snapshots()
@@ -40,6 +44,14 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
     setState(() {
       _popupMode = PopupMode.unmark;
     });
+  }
+
+  void _handleCreateAulaClick() {
+    // Lógica para criar aula
+  }
+
+  void _handleDeleteAulaClick() {
+    // Lógica para apagar aula
   }
 
   @override
@@ -110,26 +122,50 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: _handleMarkAulaClick,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                if (!isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleMarkAulaClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Marcar aula'),
                     ),
-                    child: const Text('Marcar aula'),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: _handleUnmarkAulaClick,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                if (!isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleUnmarkAulaClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Desmarcar aula'),
                     ),
-                    child: const Text('Desmarcar aula'),
                   ),
-                ),
+                if (isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleCreateAulaClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Criar aula'),
+                    ),
+                  ),
+                if (isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleDeleteAulaClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Apagar aula'),
+                    ),
+                  ),
               ],
             ),
             const SizedBox(height: 20)

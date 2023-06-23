@@ -2,6 +2,7 @@ import 'package:ethicalfitness_2/forgotPassword.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'global.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -15,7 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   // controladores de texto
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isPersonalTrainer = false;
+  //bool _isPersonalTrainer = false;
+  bool isPersonalTrainer = Globals.isPersonalTrainer;
 
   Future signIn() async {
     // loading circle
@@ -79,10 +81,11 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.white,
                         ),
                       ),
-                      value: _isPersonalTrainer,
+                      value: Globals.isPersonalTrainer,
                       onChanged: (newValue) {
                         setState(() {
-                          _isPersonalTrainer = newValue!;
+//                          isPersonalTrainer = newValue!;
+                          Globals.isPersonalTrainer = newValue!;
                         });
                       },
                       controlAffinity: ListTileControlAffinity.leading,
