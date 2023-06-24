@@ -1,4 +1,5 @@
 import 'package:ethicalfitness_2/agendaPage.dart';
+import 'package:ethicalfitness_2/adicionarDisponibilidadeScreen.dart.dart';
 import 'package:ethicalfitness_2/groupClassesPage.dart';
 import 'package:ethicalfitness_2/homePage2.dart';
 import 'package:ethicalfitness_2/personalizedWorkoutsPage.dart';
@@ -24,7 +25,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case 2:
         return const GroupClassesPage();
       case 3:
-        return const PersonalizedWorkoutsPage();
+        //return const PersonalizedWorkoutsPage2();
+        return AdicionarDisponibilidadeScreen();
       case 4:
         return const AgendaPage();
       default:

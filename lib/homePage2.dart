@@ -14,10 +14,14 @@ class HomePage2 extends StatefulWidget {
 class _HomePage2State extends State<HomePage2> {
   final asset = 'assets/bmwTest.mp4';
   final ScrollController _scrollController = ScrollController();
+  Timer? _timer;
+
+  bool _showFloatingButton = true;
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _timer?.cancel(); // Cancelar o timer ao sair da tela
     super.dispose();
   }
 
@@ -30,13 +34,33 @@ class _HomePage2State extends State<HomePage2> {
   }
 
   void scrollToFirstNews() {
-    Timer(const Duration(seconds: 1), () {
-      _scrollController.animateTo(
-        720,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+    _timer = Timer(const Duration(seconds: 1), () {
+      setState(() {
+        _showFloatingButton = false;
+      });
     });
+
+    _scrollController.animateTo(
+      20,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _resetTimer() {
+    _timer?.cancel(); // Cancelar o timer atual
+    _timer = Timer(const Duration(seconds: 1), () {
+      setState(() {
+        _showFloatingButton = false;
+      });
+    });
+  }
+
+  void _showFloatingButtonOnTap() {
+    setState(() {
+      _showFloatingButton = true;
+    });
+    _resetTimer();
   }
 
   @override
@@ -54,50 +78,37 @@ class _HomePage2State extends State<HomePage2> {
         ),
         title: const Text(''),
       ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('images/homePage.jpg'),
-                fit: BoxFit.cover,
+      body: GestureDetector(
+        onTap: _showFloatingButtonOnTap,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('images/homePage.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          ListView.builder(
+            ListView.builder(
               controller: _scrollController,
               itemCount: 7, // Atualizado para exibir 7 notícias (2 adicionadas)
               itemBuilder: (context, index) {
                 if (index == 0) {
-                  // Vídeo
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AnimatedContainer(
-                        alignment: Alignment.center,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                        padding: const EdgeInsets.all(16.0),
-                        child: const Text(
-                          'Posts',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 242, 242, 242),
-                          ),
-                        ),
+                  // Título "Posts"
+                  return AnimatedContainer(
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                    padding: const EdgeInsets.all(16.0),
+                    child: const Text(
+                      'Posts',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 242, 242, 242),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
-                        color: Colors.black, // Cor de fundo do vídeo
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: const VideoPlayerWidget(
-                          videoAsset:
-                              'assets/bmwTest.mp4', // Caminho do vídeo local
-                        ),
-                      ),
-                    ],
+                    ),
                   );
                 }
                 if (index == 1) {
@@ -135,36 +146,15 @@ class _HomePage2State extends State<HomePage2> {
                   );
                 }
                 if (index == 2) {
-                  // Primeira notícia
+                  // Vídeo
                   return Container(
                     width: MediaQuery.of(context).size.width,
                     height: 200,
-                    color: const Color.fromARGB(
-                        255, 136, 136, 136), // Cor da primeira notícia
+                    color: Colors.black, // Cor de fundo do vídeo
                     margin: const EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Título da segunda notícia',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Descrição da segunda notícia',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: const VideoPlayerWidget(
+                      videoAsset:
+                          'assets/bmwTest.mp4', // Caminho do vídeo local
                     ),
                   );
                 }
@@ -202,15 +192,12 @@ class _HomePage2State extends State<HomePage2> {
                     ),
                   );
                 }
-              }),
-        ],
+                return Container(); // Retornar um container vazio por padrão
+              },
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: scrollToFirstNews,
-        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
-        child: const Icon(Icons.arrow_downward),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

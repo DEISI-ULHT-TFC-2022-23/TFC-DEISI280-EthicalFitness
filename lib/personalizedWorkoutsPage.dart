@@ -187,9 +187,22 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
   }
 
   Widget buildUser(Treino user) => ListTile(
-        leading: CircleAvatar(
-          backgroundColor: const Color.fromARGB(255, 0, 60, 145),
-          child: Text(DateFormat('dd').format(user.data_inicio)),
+        leading: Container(
+          width: 50, // Ajuste a largura conforme necessário
+          height: 50, // Ajuste a altura conforme necessário
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color.fromARGB(255, 0, 60, 145),
+          ),
+          child: Center(
+            child: Text(
+              DateFormat('dd/MM').format(user.data_inicio),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14, // Ajuste o tamanho da fonte conforme necessário
+              ),
+            ),
+          ),
         ),
         title: Text(
           user.pt,
