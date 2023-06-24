@@ -1,34 +1,68 @@
 import 'package:ethicalfitness_2/detailsTrainingPlan.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'global.dart';
 
-class TrainingPlanPage extends StatelessWidget {
-  const TrainingPlanPage({super.key});
+//class TrainingPlanPage extends StatelessWidget {
+//TrainingPlanPage({super.key});
+class TrainingPlanPage extends StatefulWidget {
+  static const String title = 'Setup Firebase';
+
+  const TrainingPlanPage({Key? key}) : super(key: key);
 
   @override
+  _TrainingPlanPage createState() => _TrainingPlanPage();
+}
+
+class _TrainingPlanPage extends State<TrainingPlanPage> {
+  bool isPersonalTrainer = Globals.isPersonalTrainer;
+
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Transform(
-          transform: Matrix4.skewX(
-              -0.2), // skew the text by 0.3 radians (about 17 degrees)
-          child: Text(
-            'Plano de treino',
-            style: GoogleFonts.anton(
-              textStyle: const TextStyle(
-                fontSize: 29,
-                color: Color.fromARGB(255, 238, 238, 238),
+    if (isPersonalTrainer) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Transform(
+            transform: Matrix4.skewX(-0.2),
+            child: Text(
+              'Plano de treino',
+              style: GoogleFonts.anton(
+                textStyle: const TextStyle(
+                  fontSize: 27,
+                  color: Color.fromARGB(255, 238, 238, 238),
+                ),
               ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
+          backgroundColor: const Color.fromARGB(255, 18, 18, 18),
+          centerTitle: true,
         ),
         backgroundColor: const Color.fromARGB(255, 18, 18, 18),
-        centerTitle: true,
-      ),
-      backgroundColor: const Color.fromARGB(255, 18, 18, 18),
-      body: _buildListView(context),
-    );
+        body: _buildTrainerListView(context),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Transform(
+            transform: Matrix4.skewX(-0.2),
+            child: Text(
+              'Plano de treino',
+              style: GoogleFonts.anton(
+                textStyle: const TextStyle(
+                  fontSize: 27,
+                  color: Color.fromARGB(255, 238, 238, 238),
+                ),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          backgroundColor: const Color.fromARGB(255, 18, 18, 18),
+          centerTitle: true,
+        ),
+        backgroundColor: const Color.fromARGB(255, 18, 18, 18),
+        body: _buildListView(context),
+      );
+    }
   }
 
   ListView _buildListView(BuildContext context) {
@@ -99,6 +133,59 @@ class TrainingPlanPage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  ListView _buildTrainerListView(BuildContext context) {
+    final List<String> nomes = [
+      'Paulo',
+      'Sandra',
+      'Manuel',
+      'Gonçalo'
+    ]; // Lista de nomes
+
+    return ListView(
+      children: [
+        const SizedBox(height: 50),
+        const Center(
+          child: Text(
+            'Os seus alunos:',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: nomes.length,
+          itemBuilder: (_, index) {
+            return Card(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              child: ListTile(
+                title: Text(
+                  nomes[index], // Acessando o nome pelo índice
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                trailing: ElevatedButton(
+                  onPressed: () {
+                    // Lógica para atribuir o plano de treino ao nome selecionado
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                  ),
+                  child: const Text('Atribuir plano de treino'),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

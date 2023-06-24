@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'popup_content2.dart';
+import 'global.dart';
 
 enum PopupMode {
   mark,
@@ -21,6 +22,8 @@ class PersonalizedWorkoutsPage extends StatefulWidget {
 }
 
 class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
+  bool isPersonalTrainer = Globals.isPersonalTrainer;
+
   Stream<List<Treino>> readUsers() => FirebaseFirestore.instance
       .collection('treinos')
       .snapshots()
@@ -40,6 +43,14 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
     setState(() {
       _popupMode = PopupMode.unmark;
     });
+  }
+
+  void _handleCreateTreinoClick() {
+    // Lógica para criar aula
+  }
+
+  void _handleDeleteTreinoClick() {
+    // Lógica para apagar aula
   }
 
   @override
@@ -110,26 +121,50 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: _handleMarkTreinoClick,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                if (!isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleMarkTreinoClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Marcar treino'),
                     ),
-                    child: const Text('Marcar Treino'),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: _handleUnmarkTreinoClick,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                if (!isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleUnmarkTreinoClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Desmarcar treino'),
                     ),
-                    child: const Text('Desmarcar Treino'),
                   ),
-                ),
+                if (isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleCreateTreinoClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Criar treino'),
+                    ),
+                  ),
+                if (isPersonalTrainer)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: ElevatedButton(
+                      onPressed: _handleDeleteTreinoClick,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+                      ),
+                      child: const Text('Apagar treino'),
+                    ),
+                  ),
               ],
             ),
             const SizedBox(height: 20)
@@ -147,7 +182,7 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
           child: const Icon(Icons.close),
         ),
       ),
-      bottomSheet: _buildPopupContent2(),
+      bottomSheet: _buildPopupContent(),
     );
   }
 
@@ -164,15 +199,17 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
           DateFormat('HH:mm').format(user.data_inicio),
           style: const TextStyle(color: Colors.white),
         ),
-        trailing: Icon(
-          user.isMarcada ? Icons.check : Icons.close,
-          color: user.isMarcada
-              ? const Color.fromARGB(255, 0, 113, 21)
-              : const Color.fromARGB(255, 172, 0, 0),
-        ),
+        trailing: isPersonalTrainer
+            ? null
+            : Icon(
+                user.isMarcada ? Icons.check : Icons.close,
+                color: user.isMarcada
+                    ? const Color.fromARGB(255, 0, 113, 21)
+                    : const Color.fromARGB(255, 172, 0, 0),
+              ),
       );
 
-  Widget _buildPopupContent2() {
+  Widget _buildPopupContent() {
     if (_popupMode == PopupMode.mark) {
       return MarkTreinoPopupContent();
     } else if (_popupMode == PopupMode.unmark) {

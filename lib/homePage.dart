@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         return const TrainingPlanPage();
       case 2:
-        return GroupClassesPage();
+        return const GroupClassesPage();
       case 3:
         return const PersonalizedWorkoutsPage();
       case 4:
