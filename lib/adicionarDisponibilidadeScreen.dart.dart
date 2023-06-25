@@ -1,8 +1,9 @@
-import 'package:ethicalfitness_2/disponibilidadeClass.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
+import 'disponibilidadeClass.dart';
 
 class AdicionarDisponibilidadeScreen extends StatefulWidget {
   @override
@@ -94,7 +95,8 @@ class _AdicionarDisponibilidadeScreenState
                 final hora = _horaController.text;
 
                 final dataHoraString = '$data $hora';
-                final dataHora = DateTime.parse(dataHoraString);
+                final dataHora =
+                    DateFormat('yyyy-MM-dd HH:mm').parse(dataHoraString);
 
                 setState(() {
                   _dataHora = dataHora;
@@ -103,8 +105,7 @@ class _AdicionarDisponibilidadeScreenState
                 _adicionarDisponibilidade();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(
-                    255, 133, 0, 0), // Define a cor de fundo para vermelho
+                backgroundColor: const Color.fromARGB(255, 133, 0, 0),
               ),
               child: const Text('Adicionar'),
             ),
@@ -129,11 +130,14 @@ class _AdicionarDisponibilidadeScreenState
                             doc.data() as Map<String, dynamic>))
                         .toList();
 
+                    disponibilidades
+                        .sort((a, b) => b.dataHora.compareTo(a.dataHora));
+
                     return ListView.builder(
                       itemCount: disponibilidades.length,
                       itemBuilder: (context, index) {
                         final disponibilidade = disponibilidades[index];
-                        final dateFormat = DateFormat('yyyy-MM-dd');
+                        final dateFormat = DateFormat('dd-MM-yyyy');
                         final timeFormat = DateFormat('HH:mm');
                         final formattedDate =
                             dateFormat.format(disponibilidade.dataHora);
@@ -156,12 +160,15 @@ class _AdicionarDisponibilidadeScreenState
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Data: $formattedDate'),
+                                Text('Data: ${disponibilidade.dataFormatada}'),
                                 Text('Hora: $formattedTime'),
+                                Text('Aluno: ${disponibilidade.aluno}'),
+                                Text(
+                                    'Estado: ${disponibilidade.estado ? 'Marcada' : 'Não marcada'}'),
                               ],
                             ),
                             trailing: IconButton(
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               onPressed: () {
                                 _excluirDisponibilidade(disponibilidade.id);
                               },
@@ -193,9 +200,16 @@ class _AdicionarDisponibilidadeScreenState
       final disponibilidadeRef =
           FirebaseFirestore.instance.collection('disponibilidades');
 
+      final dataFormatada = DateFormat('dd-MM-yyyy').format(_dataHora);
+      final horaFormatada = DateFormat('HH:mm').format(_dataHora);
+
       final novaDisponibilidade = Disponibilidade(
         id: disponibilidadeRef.doc().id,
         dataHora: _dataHora,
+        dataFormatada: dataFormatada,
+        horaFormatada: horaFormatada,
+        aluno: "Nome do Aluno",
+        estado: false,
       );
 
       await disponibilidadeRef

@@ -2,9 +2,11 @@ import 'package:ethicalfitness_2/agendaPage.dart';
 import 'package:ethicalfitness_2/adicionarDisponibilidadeScreen.dart.dart';
 import 'package:ethicalfitness_2/groupClassesPage.dart';
 import 'package:ethicalfitness_2/homePage2.dart';
-import 'package:ethicalfitness_2/personalizedWorkoutsPage.dart';
+import 'package:ethicalfitness_2/escolherDisponibilidadeScreen.dart';
 import 'package:ethicalfitness_2/trainingPlanPage.dart';
 import 'package:flutter/material.dart';
+
+import 'global.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -14,23 +16,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isPersonalTrainer = Globals.isPersonalTrainer;
   int _selectedIndex = 0;
 
   Widget _widget() {
-    switch (_selectedIndex) {
-      case 0:
-        return const HomePage2();
-      case 1:
-        return const TrainingPlanPage();
-      case 2:
-        return const GroupClassesPage();
-      case 3:
-        //return const PersonalizedWorkoutsPage2();
-        return AdicionarDisponibilidadeScreen();
-      case 4:
-        return const AgendaPage();
-      default:
-        return const HomePage2();
+    if (isPersonalTrainer) {
+      switch (_selectedIndex) {
+        case 0:
+          return const HomePage2();
+        case 1:
+          return const TrainingPlanPage();
+        case 2:
+          return const GroupClassesPage();
+        case 3:
+          return AdicionarDisponibilidadeScreen();
+        case 4:
+          return const AgendaPage();
+        default:
+          return const HomePage2();
+      }
+    } else {
+      switch (_selectedIndex) {
+        case 0:
+          return const HomePage2();
+        case 1:
+          return const TrainingPlanPage();
+        case 2:
+          return const GroupClassesPage();
+        case 3:
+          return EscolherDisponibilidadeScreen();
+        case 4:
+          return const AgendaPage();
+        default:
+          return const HomePage2();
+      }
     }
   }
 
