@@ -1,11 +1,11 @@
 import 'package:ethicalfitness_2/treinos.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'popup_content2.dart';
-import 'global.dart';
 
 enum PopupMode {
   mark,
@@ -22,8 +22,6 @@ class PersonalizedWorkoutsPage extends StatefulWidget {
 }
 
 class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
-  bool isPersonalTrainer = Globals.isPersonalTrainer;
-
   Stream<List<Treino>> readUsers() => FirebaseFirestore.instance
       .collection('treinos')
       .snapshots()
@@ -121,7 +119,8 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                if (!isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid !=
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -132,7 +131,8 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
                       child: const Text('Marcar treino'),
                     ),
                   ),
-                if (!isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid !=
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -143,7 +143,8 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
                       child: const Text('Desmarcar treino'),
                     ),
                   ),
-                if (isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid ==
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -154,7 +155,8 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
                       child: const Text('Criar treino'),
                     ),
                   ),
-                if (isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid ==
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -212,7 +214,8 @@ class _PersonalizedWorkoutsPage extends State<PersonalizedWorkoutsPage> {
           DateFormat('HH:mm').format(user.data_inicio),
           style: const TextStyle(color: Colors.white),
         ),
-        trailing: isPersonalTrainer
+        trailing: FirebaseAuth.instance.currentUser?.uid ==
+                'N4cCEaXXEobgfIBkumEAwvWVktA2'
             ? null
             : Icon(
                 user.isMarcada ? Icons.check : Icons.close,

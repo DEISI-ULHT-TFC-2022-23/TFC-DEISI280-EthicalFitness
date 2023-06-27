@@ -20,7 +20,7 @@ class Disponibilidade {
 
   factory Disponibilidade.fromJson(Map<String, dynamic> json) {
     final dataHora = (json['dataHora'] as Timestamp).toDate();
-    final dataFormatada = DateFormat('dd-MM-yyyy').format(dataHora);
+    final dataFormatada = DateFormat('dd-MM').format(dataHora);
     final horaFormatada = DateFormat('HH:mm').format(dataHora);
 
     return Disponibilidade(

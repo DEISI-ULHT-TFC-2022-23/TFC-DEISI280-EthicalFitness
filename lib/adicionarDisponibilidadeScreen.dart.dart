@@ -52,6 +52,18 @@ class _AdicionarDisponibilidadeScreenState
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            const SizedBox(height: 25.0),
+            Text(
+              'Adicionar de disponibilidades',
+              style: GoogleFonts.bebasNeue(
+                textStyle: const TextStyle(
+                  fontSize: 25,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10.0),
             Form(
               key: _formKey,
               child: Row(
@@ -109,13 +121,16 @@ class _AdicionarDisponibilidadeScreenState
               ),
               child: const Text('Adicionar'),
             ),
-            const SizedBox(height: 50.0),
-            const Text(
-              'Lista de Disponibilidades:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            const SizedBox(height: 40.0),
+            Text(
+              'Lista de disponibilidades',
+              style: GoogleFonts.bebasNeue(
+                textStyle: const TextStyle(
+                  fontSize: 25,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10.0),
             Expanded(
@@ -133,8 +148,10 @@ class _AdicionarDisponibilidadeScreenState
                     disponibilidades
                         .sort((a, b) => b.dataHora.compareTo(a.dataHora));
 
-                    return ListView.builder(
+                    return ListView.separated(
                       itemCount: disponibilidades.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 5.0),
                       itemBuilder: (context, index) {
                         final disponibilidade = disponibilidades[index];
                         final dateFormat = DateFormat('dd-MM-yyyy');
@@ -150,28 +167,53 @@ class _AdicionarDisponibilidadeScreenState
                             _excluirDisponibilidade(disponibilidade.id);
                           },
                           background: Container(
-                            color: Colors.red,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.only(right: 16.0),
-                            child:
-                                const Icon(Icons.delete, color: Colors.white),
+                            child: const Icon(Icons.delete,
+                                color: Color.fromARGB(255, 236, 236, 236)),
                           ),
-                          child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Data: ${disponibilidade.dataFormatada}'),
-                                Text('Hora: $formattedTime'),
-                                Text('Aluno: ${disponibilidade.aluno}'),
-                                Text(
-                                    'Estado: ${disponibilidade.estado ? 'Marcada' : 'Não marcada'}'),
-                              ],
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(
+                                  255, 17, 17, 17), // Cor de fundo preto
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                _excluirDisponibilidade(disponibilidade.id);
-                              },
+                            child: ListTile(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Horário: ${disponibilidade.dataFormatada} às $formattedTime',
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 236, 236, 236),
+                                    ), // Cor do texto branco
+                                  ),
+                                  Text(
+                                    'Aluno: ${disponibilidade.aluno}',
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 236, 236, 236),
+                                    ), // Cor do texto branco
+                                  ),
+                                ],
+                              ),
+                              trailing: IconButton(
+                                icon: disponibilidade.estado
+                                    ? const Icon(
+                                        Icons.check,
+                                        color: Color.fromARGB(255, 0, 113, 21),
+                                      )
+                                    : const Icon(
+                                        Icons.close,
+                                        color: Color.fromARGB(255, 172, 0, 0),
+                                      ),
+                                onPressed: () {
+                                  _excluirDisponibilidade(disponibilidade.id);
+                                },
+                              ),
                             ),
                           ),
                         );

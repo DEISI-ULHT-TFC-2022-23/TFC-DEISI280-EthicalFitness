@@ -2,7 +2,6 @@ import 'package:ethicalfitness_2/forgotPassword.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'global.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -16,8 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   // controladores de texto
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  //bool _isPersonalTrainer = false;
-  bool isPersonalTrainer = Globals.isPersonalTrainer;
+  //bool isPersonalTrainer = Globals.isPersonalTrainer;
 
   Future signIn() async {
     // loading circle
@@ -65,40 +63,6 @@ class _LoginPageState extends State<LoginPage> {
                   style: GoogleFonts.bebasNeue(
                     color: Colors.white,
                     fontSize: 35,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Theme(
-                    data: ThemeData(
-                      unselectedWidgetColor: Colors.white,
-                    ),
-                    child: CheckboxListTile(
-                      title: const Text(
-                        'Sou Personal Trainer',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      value: Globals.isPersonalTrainer,
-                      onChanged: (newValue) {
-                        setState(() {
-//                          isPersonalTrainer = newValue!;
-                          Globals.isPersonalTrainer = newValue!;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
-                      tileColor: Colors.transparent,
-                      activeColor: const Color.fromARGB(255, 143, 0, 0),
-                      checkColor: const Color.fromARGB(255, 255, 255, 255),
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            color: Color.fromARGB(255, 0, 0, 0)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 2),

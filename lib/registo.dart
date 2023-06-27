@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,14 +12,16 @@ class Registo extends StatefulWidget {
 }
 
 class _RegistoState extends State<Registo> {
-// controladores de texto
+  // Controladores de texto
+  final _nomeControler = TextEditingController();
   final _emailControler = TextEditingController();
   final _passwordControler = TextEditingController();
   final _confirmPasswordControler = TextEditingController();
 
-// gestão de memória
+  // Gestão de memória
   @override
   void dispose() {
+    _nomeControler.dispose();
     _emailControler.dispose();
     _passwordControler.dispose();
     _confirmPasswordControler.dispose();
@@ -27,10 +30,27 @@ class _RegistoState extends State<Registo> {
 
   Future signUp() async {
     if (passwordConfirmed()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailControler.text.trim(),
-        password: _passwordControler.text.trim(),
-      );
+      try {
+        // Cria o utilizador no Firebase Authentication
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailControler.text.trim(),
+          password: _passwordControler.text.trim(),
+        );
+
+        // Obtém o ID do utilizador criado
+        String userId = userCredential.user!.uid;
+
+        // Armazena o nome do utilizador no Cloud Firestore
+        await FirebaseFirestore.instance.collection('users').doc(userId).set({
+          'nome': _nomeControler.text.trim(),
+        });
+
+        // O registo foi concluído com sucesso
+      } catch (e) {
+        // Ocorreu um erro durante o registo
+        print('Erro no registo: $e');
+      }
     }
   }
 
@@ -86,7 +106,30 @@ class _RegistoState extends State<Registo> {
                       padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: 'Email'),
+                          border: InputBorder.none,
+                          hintText: 'Nome',
+                        ),
+                        controller: _nomeControler,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Email',
+                        ),
                         controller: _emailControler,
                       ),
                     ),
@@ -106,14 +149,16 @@ class _RegistoState extends State<Registo> {
                       child: TextField(
                         obscureText: true,
                         decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: 'Password'),
+                          border: InputBorder.none,
+                          hintText: 'Password',
+                        ),
                         controller: _passwordControler,
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                //confirmar password
+                // Confirmar password
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
@@ -127,8 +172,9 @@ class _RegistoState extends State<Registo> {
                       child: TextField(
                         obscureText: true,
                         decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Confirm Password'),
+                          border: InputBorder.none,
+                          hintText: 'Confirm Password',
+                        ),
                         controller: _confirmPasswordControler,
                       ),
                     ),

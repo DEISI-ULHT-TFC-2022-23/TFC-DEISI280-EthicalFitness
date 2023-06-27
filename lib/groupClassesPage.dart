@@ -1,12 +1,11 @@
 import 'package:ethicalfitness_2/aula.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'popup_content.dart';
-import 'package:ethicalfitness_2/loginPage.dart';
-import 'global.dart';
 
 enum PopupMode {
   mark,
@@ -23,8 +22,6 @@ class GroupClassesPage extends StatefulWidget {
 }
 
 class _GroupClassesPageState extends State<GroupClassesPage> {
-  bool isPersonalTrainer = Globals.isPersonalTrainer;
-
   Stream<List<Aula>> readUsers() => FirebaseFirestore.instance
       .collection('aulas')
       .snapshots()
@@ -122,7 +119,8 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                if (!isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid !=
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -133,7 +131,8 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
                       child: const Text('Marcar aula'),
                     ),
                   ),
-                if (!isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid !=
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -144,7 +143,8 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
                       child: const Text('Desmarcar aula'),
                     ),
                   ),
-                if (isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid ==
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -155,7 +155,8 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
                       child: const Text('Criar aula'),
                     ),
                   ),
-                if (isPersonalTrainer)
+                if (FirebaseAuth.instance.currentUser?.uid ==
+                    'N4cCEaXXEobgfIBkumEAwvWVktA2')
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
@@ -213,7 +214,8 @@ class _GroupClassesPageState extends State<GroupClassesPage> {
           DateFormat('HH:mm').format(user.data_inicio),
           style: const TextStyle(color: Colors.white),
         ),
-        trailing: isPersonalTrainer
+        trailing: FirebaseAuth.instance.currentUser?.uid ==
+                'N4cCEaXXEobgfIBkumEAwvWVktA2'
             ? null
             : Icon(
                 user.isMarcada ? Icons.check : Icons.close,

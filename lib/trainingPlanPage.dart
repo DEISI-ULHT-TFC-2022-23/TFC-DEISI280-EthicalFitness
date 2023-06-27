@@ -1,10 +1,8 @@
 import 'package:ethicalfitness_2/detailsTrainingPlan.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'global.dart';
 
-//class TrainingPlanPage extends StatelessWidget {
-//TrainingPlanPage({super.key});
 class TrainingPlanPage extends StatefulWidget {
   static const String title = 'Setup Firebase';
 
@@ -15,10 +13,9 @@ class TrainingPlanPage extends StatefulWidget {
 }
 
 class _TrainingPlanPage extends State<TrainingPlanPage> {
-  bool isPersonalTrainer = Globals.isPersonalTrainer;
-
   Widget build(BuildContext context) {
-    if (isPersonalTrainer) {
+    if (FirebaseAuth.instance.currentUser?.uid ==
+        'uAUvczVwLWTsSFTFYXm0BhXNwJg2') {
       return Scaffold(
         appBar: AppBar(
           title: Transform(

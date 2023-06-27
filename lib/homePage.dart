@@ -4,9 +4,10 @@ import 'package:ethicalfitness_2/groupClassesPage.dart';
 import 'package:ethicalfitness_2/homePage2.dart';
 import 'package:ethicalfitness_2/escolherDisponibilidadeScreen.dart';
 import 'package:ethicalfitness_2/trainingPlanPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'global.dart';
+//import 'global.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -16,11 +17,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isPersonalTrainer = Globals.isPersonalTrainer;
+  //bool isPersonalTrainer = Globals.isPersonalTrainer;
   int _selectedIndex = 0;
 
   Widget _widget() {
-    if (isPersonalTrainer) {
+    if (FirebaseAuth.instance.currentUser?.uid ==
+        'N4cCEaXXEobgfIBkumEAwvWVktA2') {
       switch (_selectedIndex) {
         case 0:
           return const HomePage2();
