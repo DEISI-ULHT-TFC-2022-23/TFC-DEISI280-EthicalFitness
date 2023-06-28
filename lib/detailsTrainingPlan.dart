@@ -5,7 +5,7 @@ import 'video_player_widget.dart';
 
 class DetailsTrainingPlan extends StatefulWidget {
   final int index;
-  const DetailsTrainingPlan(this.index);
+  const DetailsTrainingPlan(this.index, {super.key});
 
   @override
   _DetailsTrainingPlanState createState() => _DetailsTrainingPlanState();

@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class HomePage2 extends StatefulWidget {
   const HomePage2({Key? key}) : super(key: key);
@@ -12,55 +13,119 @@ class HomePage2 extends StatefulWidget {
 }
 
 class _HomePage2State extends State<HomePage2> {
-  final asset = 'assets/bmwTest.mp4';
-  final ScrollController _scrollController = ScrollController();
-  Timer? _timer;
-
-  bool _showFloatingButton = true;
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _timer?.cancel(); // Cancelar o timer ao sair da tela
-    super.dispose();
-  }
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+  List<String> imageUrls = [];
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollToFirstNews();
-    });
+    fetchImages();
   }
 
-  void scrollToFirstNews() {
-    _timer = Timer(const Duration(seconds: 1), () {
+  Future<void> fetchImages() async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child("files/");
+      final listResult = await storageRef.listAll();
+
+      List<String> urls = [];
+      for (var item in listResult.items) {
+        final url = await item.getDownloadURL();
+        urls.add(url);
+      }
+
       setState(() {
-        _showFloatingButton = false;
+        imageUrls.addAll(urls);
       });
-    });
-
-    _scrollController.animateTo(
-      20,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
+    } catch (error) {
+      print('Erro ao buscar as imagens: $error');
+    }
   }
 
-  void _resetTimer() {
-    _timer?.cancel(); // Cancelar o timer atual
-    _timer = Timer(const Duration(seconds: 1), () {
-      setState(() {
-        _showFloatingButton = false;
-      });
-    });
-  }
-
-  void _showFloatingButtonOnTap() {
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) {
+      return;
+    }
     setState(() {
-      _showFloatingButton = true;
+      pickedFile = result.files.first;
     });
-    _resetTimer();
+  }
+
+  Future uploadFile() async {
+    final path = 'files/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    setState(() {
+      uploadTask = ref.putFile(file);
+    });
+
+    final snapshot = await uploadTask!.whenComplete(() {});
+
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    print('Download Link: $urlDownload');
+
+    setState(() {
+      uploadTask = null;
+    });
+  }
+
+  Future<void> deleteImage(int index) async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child("files/");
+      final listResult = await storageRef.listAll();
+
+      if (index < 0 || index >= listResult.items.length) {
+        // Exibir mensagem de erro ou retornar, pois o índice é inválido
+        return;
+      }
+
+      final item = listResult.items[index];
+      await item.delete();
+
+      setState(() {
+        imageUrls.removeAt(index);
+      });
+
+      print('Imagem apagada com sucesso!');
+    } catch (error) {
+      print('Erro ao apagar a imagem: $error');
+    }
+  }
+
+  void showPopUp() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Alterar Posts'),
+          content: Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // Definindo a cor vermelha
+                  ),
+                  onPressed: selectFile,
+                  child: const Text('Selecionar ficheiro'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // Definindo a cor vermelha
+                  ),
+                  onPressed: uploadFile,
+                  child: const Text('Carregar Ficheiro'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -78,181 +143,99 @@ class _HomePage2State extends State<HomePage2> {
         ),
         title: const Text(''),
       ),
-      body: GestureDetector(
-        onTap: _showFloatingButtonOnTap,
-        child: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/homePage.jpg'),
-                  fit: BoxFit.cover,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/homePage.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (pickedFile != null)
+                Expanded(
+                  child: Container(
+                    color: const Color.fromARGB(255, 133, 0, 0),
+                    child: Center(
+                      child: Image.file(
+                        File(pickedFile!.path!),
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: imageUrls.length,
+                  itemBuilder: (context, index) {
+                    return Dismissible(
+                      key: Key(imageUrls[index]),
+                      onDismissed: (direction) {
+                        if (direction == DismissDirection.endToStart) {
+                          deleteImage(index);
+                        }
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                      child: Image.network(imageUrls[index]),
+                    );
+                  },
                 ),
               ),
-            ),
-            ListView.builder(
-              controller: _scrollController,
-              itemCount: 7, // Atualizado para exibir 7 notícias (2 adicionadas)
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  // Título "Posts"
-                  return AnimatedContainer(
-                    alignment: Alignment.center,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                    padding: const EdgeInsets.all(16.0),
-                    child: const Text(
-                      'Posts',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 242, 242, 242),
-                      ),
-                    ),
-                  );
-                }
-                if (index == 1) {
-                  // Primeira notícia
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 200,
-                    color: const Color.fromARGB(
-                        255, 0, 28, 51), // Cor da primeira notícia
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Título da segunda notícia',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Descrição da segunda notícia',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                if (index == 2) {
-                  // Vídeo
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 200,
-                    color: Colors.black, // Cor de fundo do vídeo
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: const VideoPlayerWidget(
-                      videoAsset:
-                          'assets/bmwTest.mp4', // Caminho do vídeo local
-                    ),
-                  );
-                }
-                if (index == 3) {
-                  // Segunda notícia
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 200,
-                    color: const Color.fromARGB(
-                        255, 0, 28, 51), // Cor da segunda notícia
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Título da terceira notícia',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Descrição da terceira notícia',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                return Container(); // Retornar um container vazio por padrão
-              },
-            ),
-          ],
+              const SizedBox(height: 30),
+              buildProgress(),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: showPopUp,
+        backgroundColor:
+            const Color.fromARGB(255, 133, 0, 0), // Definindo a cor vermelha
+        child: const Icon(Icons.add),
       ),
     );
   }
-}
 
-class VideoPlayerWidget extends StatefulWidget {
-  final String videoAsset;
+  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+        stream: uploadTask?.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final data = snapshot.data!;
+            double progress = data.bytesTransferred / data.totalBytes;
 
-  const VideoPlayerWidget({required this.videoAsset, Key? key})
-      : super(key: key);
-
-  @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
-}
-
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late ChewieController _chewieController;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeVideoPlayer();
-  }
-
-  @override
-  void dispose() {
-    _chewieController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _initializeVideoPlayer() async {
-    final videoPlayerController =
-        VideoPlayerController.asset(widget.videoAsset);
-
-    await videoPlayerController.initialize();
-
-    _chewieController = ChewieController(
-      videoPlayerController: videoPlayerController,
-      autoPlay: true,
-      looping: true,
-    );
-
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_chewieController != null &&
-        _chewieController.videoPlayerController.value.isInitialized) {
-      return Chewie(
-        controller: _chewieController,
+            return SizedBox(
+              height: 50,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.grey,
+                    color: Colors.green,
+                  ),
+                  Center(
+                    child: Text(
+                      '${(100 * progress).roundToDouble()}%',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else {
+            return const SizedBox(height: 50);
+          }
+        },
       );
-    }
-
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
 }

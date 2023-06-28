@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'adicionarDisponibilidadeScreen.dart.dart';
 import 'disponibilidadeClass.dart';
 
 class EscolherDisponibilidadeScreen extends StatefulWidget {
+  const EscolherDisponibilidadeScreen({super.key});
+
   @override
   _EscolherDisponibilidadeScreenState createState() =>
       _EscolherDisponibilidadeScreenState();
@@ -30,8 +31,11 @@ class _EscolherDisponibilidadeScreenState
     setState(() {
       disponibilidades = snapshot.docs
           .map((doc) =>
-              Disponibilidade.fromJson(doc.data() as Map<String, dynamic>))
+              Disponibilidade.fromJson(doc.data()))
           .toList();
+
+      disponibilidades.sort((a, b) =>
+          a.dataHora.compareTo(b.dataHora)); // Ordenar por data e hora
     });
   }
 

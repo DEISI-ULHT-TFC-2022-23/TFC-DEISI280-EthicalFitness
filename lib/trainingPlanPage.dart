@@ -13,6 +13,7 @@ class TrainingPlanPage extends StatefulWidget {
 }
 
 class _TrainingPlanPage extends State<TrainingPlanPage> {
+  @override
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser?.uid ==
         'uAUvczVwLWTsSFTFYXm0BhXNwJg2') {

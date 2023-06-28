@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'disponibilidadeClass.dart';
 
 class AdicionarDisponibilidadeScreen extends StatefulWidget {
+  const AdicionarDisponibilidadeScreen({super.key});
+
   @override
   _AdicionarDisponibilidadeScreenState createState() =>
       _AdicionarDisponibilidadeScreenState();
@@ -16,8 +18,8 @@ class _AdicionarDisponibilidadeScreenState
   final _formKey = GlobalKey<FormState>();
   late DateTime _dataHora;
 
-  TextEditingController _dataController = TextEditingController();
-  TextEditingController _horaController = TextEditingController();
+  final TextEditingController _dataController = TextEditingController();
+  final TextEditingController _horaController = TextEditingController();
 
   @override
   void dispose() {
@@ -28,8 +30,6 @@ class _AdicionarDisponibilidadeScreenState
 
   @override
   Widget build(BuildContext context) {
-    final personalTrainerId = 'seu_personal_trainer_id_aqui';
-
     return Scaffold(
       appBar: AppBar(
         title: Transform(

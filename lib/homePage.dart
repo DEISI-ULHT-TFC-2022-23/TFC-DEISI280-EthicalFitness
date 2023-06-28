@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 2:
           return const GroupClassesPage();
         case 3:
-          return AdicionarDisponibilidadeScreen();
+          return const AdicionarDisponibilidadeScreen();
         case 4:
           return const AgendaPage();
         default:
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 2:
           return const GroupClassesPage();
         case 3:
-          return EscolherDisponibilidadeScreen();
+          return const EscolherDisponibilidadeScreen();
         case 4:
           return const AgendaPage();
         default:

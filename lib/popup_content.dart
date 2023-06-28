@@ -6,6 +6,8 @@ import 'event.dart';
 import 'event_provider.dart';
 
 class MarkAulaPopupContent extends StatelessWidget {
+  const MarkAulaPopupContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,6 +121,8 @@ class MarkAulaPopupContent extends StatelessWidget {
 }
 
 class UnmarkAulaPopupContent extends StatelessWidget {
+  const UnmarkAulaPopupContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

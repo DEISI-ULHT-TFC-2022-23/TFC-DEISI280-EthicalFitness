@@ -33,6 +33,13 @@ class Disponibilidade {
     );
   }
 
+  DateTime get data {
+    // Retornar apenas a data sem o horário
+    final format = DateFormat('dd-MM-yyyy');
+    final date = format.parse('$dataFormatada-${DateTime.now().year}');
+    return date;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

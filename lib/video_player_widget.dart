@@ -13,9 +13,9 @@ class VideoPlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => controller.value.isInitialized
       ? Container(alignment: Alignment.topCenter, child: buildVideo())
-      : Container(
+      : const SizedBox(
           height: 200,
-          child: const Center(child: CircularProgressIndicator()),
+          child: Center(child: CircularProgressIndicator()),
         );
 
   Widget buildVideo() => Stack(

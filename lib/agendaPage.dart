@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AgendaPage extends StatelessWidget {
-  const AgendaPage({Key? key});
+  const AgendaPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class AgendaPage extends StatelessWidget {
           provider.setDate(details.date!);
           showModalBottomSheet(
             context: context,
-            builder: (context) => TasksWidget(),
+            builder: (context) => const TasksWidget(),
           );
         },
       ),
