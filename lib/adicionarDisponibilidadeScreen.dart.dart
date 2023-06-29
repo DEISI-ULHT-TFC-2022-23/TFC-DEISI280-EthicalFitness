@@ -16,15 +16,20 @@ class AdicionarDisponibilidadeScreen extends StatefulWidget {
 class _AdicionarDisponibilidadeScreenState
     extends State<AdicionarDisponibilidadeScreen> {
   final _formKey = GlobalKey<FormState>();
-  late DateTime _dataHora;
 
   final TextEditingController _dataController = TextEditingController();
-  final TextEditingController _horaController = TextEditingController();
+  //final TextEditingController _horaController = TextEditingController();
+  final TextEditingController _horaInicioController = TextEditingController();
+  final TextEditingController _horaFimController = TextEditingController();
+
+  late DateTime _dataHoraInicio;
+  late DateTime _dataHoraFim;
 
   @override
   void dispose() {
     _dataController.dispose();
-    _horaController.dispose();
+    _horaInicioController.dispose();
+    _horaFimController.dispose();
     super.dispose();
   }
 
@@ -85,13 +90,28 @@ class _AdicionarDisponibilidadeScreenState
                   const SizedBox(width: 16.0),
                   Expanded(
                     child: TextFormField(
-                      controller: _horaController,
+                      controller: _horaInicioController,
                       decoration: const InputDecoration(
-                        labelText: 'Hora (HH:MM)',
+                        labelText: 'Hora de Início (HH:MM)',
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, insira uma hora válida';
+                          return 'Por favor, insira uma hora válida para o horário de início';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _horaFimController,
+                      decoration: const InputDecoration(
+                        labelText: 'Hora de Fim (HH:MM)',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira uma hora válida para o horário de fim';
                         }
                         return null;
                       },
@@ -104,14 +124,20 @@ class _AdicionarDisponibilidadeScreenState
             ElevatedButton(
               onPressed: () {
                 final data = _dataController.text;
-                final hora = _horaController.text;
+                final horaInicio = _horaInicioController.text;
+                final horaFim = _horaFimController.text;
 
-                final dataHoraString = '$data $hora';
-                final dataHora =
-                    DateFormat('yyyy-MM-dd HH:mm').parse(dataHoraString);
+                final dataHoraInicioString = '$data $horaInicio';
+                final dataHoraFimString = '$data $horaFim';
+
+                final dataHoraInicio =
+                    DateFormat('yyyy-MM-dd HH:mm').parse(dataHoraInicioString);
+                final dataHoraFim =
+                    DateFormat('yyyy-MM-dd HH:mm').parse(dataHoraFimString);
 
                 setState(() {
-                  _dataHora = dataHora;
+                  _dataHoraInicio = dataHoraInicio;
+                  _dataHoraFim = dataHoraFim;
                 });
 
                 _adicionarDisponibilidade();
@@ -145,8 +171,8 @@ class _AdicionarDisponibilidadeScreenState
                             doc.data() as Map<String, dynamic>))
                         .toList();
 
-                    disponibilidades
-                        .sort((a, b) => b.dataHora.compareTo(a.dataHora));
+                    disponibilidades.sort(
+                        (a, b) => b.dataHoraInicio.compareTo(a.dataHoraInicio));
 
                     return ListView.separated(
                       itemCount: disponibilidades.length,
@@ -157,9 +183,9 @@ class _AdicionarDisponibilidadeScreenState
                         final dateFormat = DateFormat('dd-MM-yyyy');
                         final timeFormat = DateFormat('HH:mm');
                         final formattedDate =
-                            dateFormat.format(disponibilidade.dataHora);
+                            dateFormat.format(disponibilidade.dataHoraInicio);
                         final formattedTime =
-                            timeFormat.format(disponibilidade.dataHora);
+                            timeFormat.format(disponibilidade.dataHoraInicio);
 
                         return Dismissible(
                           key: Key(disponibilidade.id),
@@ -242,14 +268,17 @@ class _AdicionarDisponibilidadeScreenState
       final disponibilidadeRef =
           FirebaseFirestore.instance.collection('disponibilidades');
 
-      final dataFormatada = DateFormat('dd-MM-yyyy').format(_dataHora);
-      final horaFormatada = DateFormat('HH:mm').format(_dataHora);
+      final dataFormatada = DateFormat('dd-MM-yyyy').format(_dataHoraInicio);
+      final horaInicioFormatada = DateFormat('HH:mm').format(_dataHoraInicio);
+      final horaFimFormatada = DateFormat('HH:mm').format(_dataHoraFim);
 
       final novaDisponibilidade = Disponibilidade(
         id: disponibilidadeRef.doc().id,
-        dataHora: _dataHora,
+        dataHoraInicio: _dataHoraInicio,
+        dataHoraFim: _dataHoraFim,
         dataFormatada: dataFormatada,
-        horaFormatada: horaFormatada,
+        horaInicioFormatada: horaInicioFormatada,
+        horaFimFormatada: horaFimFormatada,
         aluno: "Nome do Aluno",
         estado: false,
       );

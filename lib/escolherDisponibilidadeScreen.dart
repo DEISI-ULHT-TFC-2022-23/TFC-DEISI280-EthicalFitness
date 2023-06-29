@@ -1,7 +1,10 @@
+import 'package:ethicalfitness_2/event.dart';
+import 'package:ethicalfitness_2/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'disponibilidadeClass.dart';
 
 class EscolherDisponibilidadeScreen extends StatefulWidget {
@@ -33,8 +36,8 @@ class _EscolherDisponibilidadeScreenState
           .map((doc) => Disponibilidade.fromJson(doc.data()))
           .toList();
 
-      disponibilidades.sort((a, b) =>
-          a.dataHora.compareTo(b.dataHora)); // Ordenar por data e hora
+      disponibilidades
+          .sort((a, b) => a.dataHoraInicio.compareTo(b.dataHoraInicio));
     });
   }
 
@@ -110,7 +113,16 @@ class _EscolherDisponibilidadeScreenState
                                 const SizedBox(height: 10.0),
                                 Center(
                                   child: Text(
-                                    'Horário: ${disponibilidade.dataFormatada} às ${disponibilidade.horaFormatada}',
+                                    'Dia: ${disponibilidade.dataFormatada}',
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 236, 236, 236),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 5.0),
+                                Center(
+                                  child: Text(
+                                    'Duração: ${disponibilidade.horaInicioFormatada} - ${disponibilidade.horaFimFormatada}',
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 236, 236, 236),
                                     ),
@@ -179,6 +191,22 @@ class _EscolherDisponibilidadeScreenState
           .doc(disponibilidade.id);
 
       batch.update(disponibilidadeRef, disponibilidade.toJson());
+
+      // Verifique se a disponibilidade foi marcada pelo aluno
+      if (disponibilidade.estado) {
+        final eventProvider =
+            Provider.of<EventProvider>(context, listen: false);
+        final event = Event(
+          title: 'Disponibilidade marcada',
+          description:
+              'Horário: ${disponibilidade.dataFormatada} às ${disponibilidade.dataHoraInicio}',
+          from: disponibilidade
+              .dataHoraInicio, // Usando a mesma data e hora para "from"
+          to: disponibilidade.dataHoraFim, // e "to"
+        );
+
+        eventProvider.addEvent(event);
+      }
     }
 
     await batch.commit();
