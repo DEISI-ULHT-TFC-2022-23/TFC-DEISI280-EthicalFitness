@@ -1,6 +1,7 @@
+import 'package:ethicalfitness_2/adicionarAulasScreen.dart';
 import 'package:ethicalfitness_2/agendaPage.dart';
 import 'package:ethicalfitness_2/adicionarDisponibilidadeScreen.dart.dart';
-import 'package:ethicalfitness_2/groupClassesPage.dart';
+import 'package:ethicalfitness_2/escolherAulasScreen.dart';
 import 'package:ethicalfitness_2/homePage2.dart';
 import 'package:ethicalfitness_2/escolherDisponibilidadeScreen.dart';
 import 'package:ethicalfitness_2/trainingPlanPage.dart';
@@ -29,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 1:
           return const TrainingPlanPage();
         case 2:
-          return const GroupClassesPage();
+          return const AdicionarAulasScreen();
         case 3:
           return const AdicionarDisponibilidadeScreen();
         case 4:
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 1:
           return const TrainingPlanPage();
         case 2:
-          return const GroupClassesPage();
+          return const EscolherAulasScreen();
         case 3:
           return const EscolherDisponibilidadeScreen();
         case 4:

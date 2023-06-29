@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'disponibilidadeClass.dart';
+import 'aula.dart';
 
-class EscolherDisponibilidadeScreen extends StatefulWidget {
-  const EscolherDisponibilidadeScreen({super.key});
+class EscolherAulasScreen extends StatefulWidget {
+  const EscolherAulasScreen({super.key});
 
   @override
-  _EscolherDisponibilidadeScreenState createState() =>
-      _EscolherDisponibilidadeScreenState();
+  _EscolherAulasScreenState createState() => _EscolherAulasScreenState();
 }
 
-class _EscolherDisponibilidadeScreenState
-    extends State<EscolherDisponibilidadeScreen> {
-  List<Disponibilidade> disponibilidades = [];
+class _EscolherAulasScreenState extends State<EscolherAulasScreen> {
+  List<Aulas> aulas = [];
 
   String nomeUsuario = '';
 
@@ -26,14 +24,11 @@ class _EscolherDisponibilidadeScreenState
   }
 
   Future<void> _carregarDisponibilidades() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('disponibilidades').get();
+    final snapshot = await FirebaseFirestore.instance.collection('aulas').get();
     setState(() {
-      disponibilidades = snapshot.docs
-          .map((doc) => Disponibilidade.fromJson(doc.data()))
-          .toList();
+      aulas = snapshot.docs.map((doc) => Aulas.fromJson(doc.data())).toList();
 
-      disponibilidades.sort((a, b) =>
+      aulas.sort((a, b) =>
           a.dataHora.compareTo(b.dataHora)); // Ordenar por data e hora
     });
   }
@@ -58,7 +53,7 @@ class _EscolherDisponibilidadeScreenState
         title: Transform(
           transform: Matrix4.skewX(-0.2),
           child: Text(
-            'Escolher Disponibilidade',
+            'Escolher Aula',
             style: GoogleFonts.anton(
               textStyle: const TextStyle(
                 fontSize: 27,
@@ -77,7 +72,7 @@ class _EscolherDisponibilidadeScreenState
           children: [
             const SizedBox(height: 25.0),
             Text(
-              'Escolher disponibilidades',
+              'Escolher Aulas',
               style: GoogleFonts.bebasNeue(
                 textStyle: const TextStyle(
                   fontSize: 25,
@@ -88,12 +83,12 @@ class _EscolherDisponibilidadeScreenState
             ),
             const SizedBox(height: 10.0),
             Expanded(
-              child: disponibilidades.isEmpty
+              child: aulas.isEmpty
                   ? const Center(child: CircularProgressIndicator())
                   : ListView.builder(
-                      itemCount: disponibilidades.length,
+                      itemCount: aulas.length,
                       itemBuilder: (context, index) {
-                        final disponibilidade = disponibilidades[index];
+                        final aula = aulas[index];
 
                         return Container(
                           margin: const EdgeInsets.only(
@@ -110,7 +105,17 @@ class _EscolherDisponibilidadeScreenState
                                 const SizedBox(height: 10.0),
                                 Center(
                                   child: Text(
-                                    'Horário: ${disponibilidade.dataFormatada} às ${disponibilidade.horaFormatada}',
+                                    aula.tipo,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 236, 236, 236),
+                                      fontWeight: FontWeight.bold,
+                                    ), // Cor do texto branco
+                                  ),
+                                ),
+                                const SizedBox(height: 5.0),
+                                Center(
+                                  child: Text(
+                                    'Horário: ${aula.dataFormatada} às ${aula.horaFormatada}',
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 236, 236, 236),
                                     ),
@@ -121,18 +126,16 @@ class _EscolherDisponibilidadeScreenState
                                   child: ElevatedButton(
                                     onPressed: () {
                                       setState(() {
-                                        disponibilidade.estado =
-                                            !disponibilidade.estado;
-                                        if (!disponibilidade.estado) {
-                                          disponibilidade.aluno =
-                                              'Nome do Aluno';
+                                        aula.estado = !aula.estado;
+                                        if (!aula.estado) {
+                                          aula.aluno = 'Nome do Aluno';
                                         } else {
-                                          disponibilidade.aluno = nomeUsuario;
+                                          aula.aluno = nomeUsuario;
                                         }
                                       });
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: disponibilidade.estado
+                                      backgroundColor: aula.estado
                                           ? const Color.fromARGB(255, 172, 0, 0)
                                           : const Color.fromARGB(
                                               255, 0, 113, 21),
@@ -142,9 +145,7 @@ class _EscolherDisponibilidadeScreenState
                                       ),
                                     ),
                                     child: Text(
-                                      disponibilidade.estado
-                                          ? 'Desmarcar'
-                                          : 'Marcar',
+                                      aula.estado ? 'Desmarcar' : 'Marcar',
                                       style: const TextStyle(
                                         color: Colors.white,
                                       ),
@@ -173,12 +174,11 @@ class _EscolherDisponibilidadeScreenState
   Future<void> _salvarAlteracoes() async {
     final batch = FirebaseFirestore.instance.batch();
 
-    for (var disponibilidade in disponibilidades) {
-      final disponibilidadeRef = FirebaseFirestore.instance
-          .collection('disponibilidades')
-          .doc(disponibilidade.id);
+    for (var aula in aulas) {
+      final aulaRef =
+          FirebaseFirestore.instance.collection('aulas').doc(aula.id);
 
-      batch.update(disponibilidadeRef, disponibilidade.toJson());
+      batch.update(aulaRef, aula.toJson());
     }
 
     await batch.commit();

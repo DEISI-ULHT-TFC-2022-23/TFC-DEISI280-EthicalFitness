@@ -1,33 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
-class Aula {
-  String id;
-  final String tipo;
-  final DateTime data_inicio;
-  final DateTime data_fim;
-  final bool isMarcada;
+class Aulas {
+  late String id;
+  late DateTime dataHora;
+  late String dataFormatada;
+  late String horaFormatada;
+  late String aluno;
+  late bool estado;
+  late String tipo;
 
-  Aula({
-    this.id = '',
+  Aulas({
+    required this.id,
+    required this.dataHora,
+    required this.dataFormatada,
+    required this.horaFormatada,
+    required this.aluno,
+    required this.estado,
     required this.tipo,
-    required this.data_inicio,
-    required this.data_fim,
-    this.isMarcada = false,
   });
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'tipo': tipo,
-        'data_inicio': data_inicio,
-        'data_fim': data_fim,
-        'isMarcada': isMarcada,
-      };
+  factory Aulas.fromJson(Map<String, dynamic> json) {
+    final dataHora = (json['dataHora'] as Timestamp).toDate();
+    final dataFormatada = DateFormat('dd-MM').format(dataHora);
+    final horaFormatada = DateFormat('HH:mm').format(dataHora);
 
-  static Aula fromJson(Map<String, dynamic> json) => Aula(
-        id: json['id'] ?? '',
-        tipo: json['tipo'],
-        data_inicio: (json['data_inicio'] as Timestamp).toDate(),
-        data_fim: (json['data_fim'] as Timestamp).toDate(),
-        isMarcada: json['isMarcada'],
-      );
+    return Aulas(
+      id: json['id'],
+      dataHora: dataHora,
+      dataFormatada: dataFormatada,
+      horaFormatada: horaFormatada,
+      aluno: json['aluno'],
+      estado: json['estado'],
+      tipo: json['tipo'],
+    );
+  }
+
+  DateTime get data {
+    // Retornar apenas a data sem o horário
+    final format = DateFormat('dd-MM-yyyy');
+    final date = format.parse('$dataFormatada-${DateTime.now().year}');
+    return date;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'dataHora': dataHora,
+      'aluno': aluno,
+      'estado': estado,
+      'tipo': tipo,
+    };
+  }
 }

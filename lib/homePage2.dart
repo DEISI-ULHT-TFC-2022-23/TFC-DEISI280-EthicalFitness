@@ -107,7 +107,7 @@ class _HomePage2State extends State<HomePage2> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.red, // Definindo a cor vermelha
+                    backgroundColor: Colors.red,
                   ),
                   onPressed: selectFile,
                   child: const Text('Selecionar ficheiro'),
@@ -115,7 +115,7 @@ class _HomePage2State extends State<HomePage2> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.red, // Definindo a cor vermelha
+                    backgroundColor: Colors.red,
                   ),
                   onPressed: uploadFile,
                   child: const Text('Carregar Ficheiro'),
@@ -198,11 +198,14 @@ class _HomePage2State extends State<HomePage2> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: showPopUp,
-        backgroundColor:
-            const Color.fromARGB(255, 133, 0, 0), // Definindo a cor vermelha
-        child: const Icon(Icons.add),
+      floatingActionButton: Visibility(
+        visible: FirebaseAuth.instance.currentUser?.uid ==
+            'N4cCEaXXEobgfIBkumEAwvWVktA2',
+        child: FloatingActionButton(
+          onPressed: showPopUp,
+          backgroundColor: const Color.fromARGB(255, 133, 0, 0),
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
