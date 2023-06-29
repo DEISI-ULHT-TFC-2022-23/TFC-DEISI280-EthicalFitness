@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage2 extends StatefulWidget {
   const HomePage2({Key? key}) : super(key: key);
@@ -141,7 +142,20 @@ class _HomePage2State extends State<HomePage2> {
                 context, "/login", (route) => false);
           },
         ),
-        title: const Text(''),
+        title: Transform(
+          transform: Matrix4.skewX(-0.2),
+          child: Text(
+            'Novidades',
+            style: GoogleFonts.anton(
+              textStyle: const TextStyle(
+                fontSize: 27,
+                color: Color.fromARGB(255, 238, 238, 238),
+              ),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
